@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Be My Valentine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #F2D16B;
+            background-image: 
+                radial-gradient(circle, #000 5%, transparent 5%),
+                radial-gradient(circle, #000 5%, transparent 5%),
+                radial-gradient(circle, #000 7%, transparent 7%),
+                radial-gradient(circle, #000 7%, transparent 7%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px, 15px 15px, 45px 45px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 20px;
+        }
+
+        .heart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .heart::before {
+            content: '';
+            position: absolute;
+            background: #ff69b4;
+            width: 95%;
+            height: 95%;
+            left: 2.5%;
+            right: 2.5%;
+            clip-path: url(#heart-path);
+            filter: drop-shadow(0 0 8px rgba(255,105,180,0.3));
+        }
+
+        .heart::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            background: #ff0000;
+            clip-path: url(#heart-path);
+            transform: scale(0.9);
+        }
+
+        .text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            z-index: 2;
+            width: 80%;
+        }
+
+        .buttons {
+            margin-top: 50px;
+            display: flex;
+            gap: 40px;
+        }
+
+        button {
+            padding: 24px 48px;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(45deg, #ff0066, #ff1493);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.98); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(1080deg); }
+        }
+
+        .spin {
+            animation: spin 1.5s linear;
+        }
+
+        @keyframes fly {
+            0% { 
+                transform: translate(calc(var(--startX) * 1vw), calc(var(--startY) * 1vh)) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translate(calc(var(--endX) * 1vw), calc(var(--endY) * 1vh)) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+        .flying-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .flying-hearts .heart-emoji {
+            position: absolute;
+            font-size: 30px;
+            animation: fly 5s linear forwards;
+        }
+
+        #gif-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            display: none;
+            animation: dance 2s infinite alternate ease-in-out;
+            width: 100%;
+            text-align: center;
+        }
+
+        #gif-container img {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+        }
+
+        .love-text {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 1s ease;
+            white-space: nowrap;
+        }
+
+        .valentines-day-text {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: none;
+        }
+
+        /* Bubble letter style */
+        .bubble-text {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: #ff0066; /* Matching the heart's gradient */
+            text-shadow: 
+                3px 3px 0 #ff69b4,
+                -3px -3px 0 #ff69b4,
+                3px -3px 0 #ff69b4,
+                -3px 3px 0 #ff69b4;
+            display: inline-block;
+            transform: rotate(-5deg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(-5deg); }
+        }
+
+        @keyframes dance {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -52%) rotate(-5deg); }
+            50% { transform: translate(-50%, -48%) rotate(5deg); }
+            75% { transform: translate(-52%, -50%) rotate(-5deg); }
+            100% { transform: translate(-48%, -50%) rotate(5deg); }
+        }
+
+        /* Hide buttons */
+        .buttons.hidden {
+            display: none;
+        }
+
+        .break {
+            animation: breakHeart 0.5s ease forwards;
+        }
+
+        @keyframes breakHeart {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-45deg); }
+            100% { transform: rotate(-90deg); opacity: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .heart-container {
+                width: 300px;
+                height: 300px;
+            }
+            .text {
+                font-size: 28px;
+            }
+            button {
+                padding: 16px 32px;
+                font-size: 20px;
+            }
+            .flying-hearts .heart-emoji {
+                font-size: 24px;
+            }
+            #gif-container {
+                animation: mobile-dance 2s infinite alternate ease-in-out;
+            }
+
+            .bubble-text {
+                font-size: 40px;
+            }
+
+            @keyframes mobile-dance {
+                0% { transform: translate(-50%, -50%) rotate(0deg); }
+                25% { transform: translate(-50%, -52%) rotate(-5deg); }
+                50% { transform: translate(-50%, -48%) rotate(5deg); }
+                75% { transform: translate(-52%, -50%) rotate(-5deg); }
+                100% { transform: translate(-48%, -50%) rotate(5deg); }
+            }
+        }
+    </style>
+</head>
+<body>
+    <svg width="0" height="0">
+        <defs>
+            <clipPath id="heart-path" clipPathUnits="objectBoundingBox">
+                <path d="M0.5,0.15 C0.35,-0.05 0,0.05 0,0.35 C0,0.65 0.25,0.85 0.5,1 C0.75,0.85 1,0.65 1,0.35 C1,0.05 0.65,-0.05 0.5,0.15 Z" />
+            </clipPath>
+        </defs>
+    </svg>
+
+    <div class="heart-container">
+        <div class="heart">
+            <div class="text">Be My Wild<br>Valentine?</div>
+            <div class="love-text bubble-text" id="loveText">I LOVE YOU!</div>
+            <div class="valentines-day-text bubble-text" id="valentinesDayText">HAPPY VALENTINES DAY !</div>
+        </div>
+    </div>
+    <div class="buttons">
+        <button id="yes-button" aria-label="Yes">Yes!😋</button>
+        <button aria-label="No">Noooo🙂‍↔️</button>
+    </div>
+
+    <div class="flying-hearts" id="flying-hearts"></div>
+    <div id="gif-container"></div>
+
+    <!-- Adding romantic music -->
+    <audio id="romantic-music" loop src="path/to/your/romantic/music.mp3"></audio>
+
+    <!-- Cute "yippee" sound effect -->
+    <audio id="sound-effect" src="https://cdn.pixabay.com/download/audio/2022/09/29/audio_25c34f1907.mp3"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const yesButton = document.getElementById('yes-button');
+        const flyingHeartsContainer = document.getElementById('flying-hearts');
+        const gifContainer = document.getElementById('gif-container');
+        const loveText = document.getElementById('loveText');
+        const valentinesDayText = document.getElementById('valentinesDayText');
+        const romanticMusic = document.getElementById('romantic-music');
+        const buttons = document.querySelector('.buttons');
+
+        yesButton.addEventListener('click', () => {
+            const sound = document.getElementById('sound-effect');
+            sound.play();
+            romanticMusic.play();
+
+            // Keep confetti going
+            const confettiInterval = setInterval(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }, 1500); // Every 1.5 seconds
+
+            const heart = document.querySelector('.heart');
+            heart.classList.add('spin');
+
+            heart.addEventListener('animationend', () => {
+                heart.classList.remove('spin');
+                heart.style.display = 'none';
+
+                // Show "I LOVE YOU" texts
+                loveText.style.opacity = '1';
+                valentinesDayText.style.display = 'block';
+
+                setTimeout(() => {
+                    gifContainer.style.display = 'block';
+                    gifContainer.innerHTML = `<img src="https://media2.giphy.com/media/cFaeVHkkXsAWFPq750/giphy.gif?cid=9b38fe91vq3ma8innhe1msq28teasphz58yxllr0fft0hxmb&ep=v1_gifs_username&rid=giphy.gif&ct=s" alt="Celebration GIF" style="max-width: 100%; height: auto;">`;
+
+                    // Hide buttons
+                    buttons.classList.add('hidden');
+                }, 500);
+            }, { once: true });
+
+            // Keep hearts flying
+            const heartInterval = setInterval(() => {
+                for (let i = 0; i < 10; i++) { // Create 10 hearts every interval
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-emoji');
+                    const heartColor = Math.random() > 0.5 ? '💛' : '🤎';
+                    heart.innerHTML = heartColor;
+
+                    const startX = Math.random() * 100;
+                    const startY = Math.random() * 100;
+                    const endX = Math.random() * 100;
+                    const endY = -50;
+
+                    heart.style.setProperty('--startX', startX);
+                    heart.style.setProperty('--startY', startY);
+                    heart.style.setProperty('--endX', endX);
+                    heart.style.setProperty('--endY', endY);
+
+                    heart.style.fontSize = `${Math.random() * 40 + 30}px`;
+                    heart.style.animationDuration = `${Math.random() * 2 + 1}s`;
+
+                    flyingHeartsContainer.appendChild(heart);
+
+                    heart.addEventListener('animationend', () => {
+                        heart.remove();
+                    });
+                }
+            }, 500); // Every 0.5 seconds
+        });
+
+        const noButton = document.querySelector('button[aria-label="No"]');
+        noButton.addEventListener('click', () => {
+            const heart = document.querySelector('.heart');
+            heart.classList.add('break');
+            
+            heart.addEventListener('animationend', () => {
+                heart.style.display = 'none';
+            }, { once: true });
+
+            alert("Aww, maybe next time! 😿");
+        });
+    </script>
+</body>
+</html>
